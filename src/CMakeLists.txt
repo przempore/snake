@@ -14,4 +14,4 @@ endif()
 # Generic test that uses conan libs
 add_executable(intro main.cpp)
 target_link_libraries(
-	intro PRIVATE CONAN_PKG::ncurses)
+	intro PRIVATE CONAN_PKG::ncurses dl)
