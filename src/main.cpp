@@ -3,14 +3,21 @@
 #include <algorithm>
 
 namespace {
-int x = 5;
-int y = 5;
 constexpr int key_a = 97;
 constexpr int key_s = 115;
 constexpr int key_d = 100;
 constexpr int key_w = 119;
 }
-void printSnake(int key_number) {
+
+class Snake {
+    public:
+        void step(int key_number);
+        std::pair<int, int> getPosition();
+    private:
+        int x = 5, y = 5;
+};
+
+void Snake::step(int key_number) {
   if (key_number == key_a && x > 2) x--;
   else if (key_number == key_s && y < 18) y++;
   else if (key_number == key_d && x < 37) x++;
@@ -20,9 +27,13 @@ void printSnake(int key_number) {
   printw("&");
 }
 
+std::pair<int, int> Snake::getPosition() {
+  return {x, y};
+}
+
 void printBoard() {
   char line[41];
-  char borders[41];// = {' '};
+  char borders[41];
 
   borders[0] = '|'; borders[1] = '|';
   std::fill(line, line + 40, '=');
@@ -46,12 +57,14 @@ void printBoard() {
 int main(int , const char **) {
   initscr();
   printBoard();
+  Snake snake;
   int key_number;
   while((key_number = getch()) != 27) {
     clear();
     printBoard();
-    printSnake(key_number);
+    snake.step(key_number);
     move(20, 0);
+    auto [x, y] = snake.getPosition();
     printw("x = %d, y = %d\n", x, y);
   }
   endwin();
