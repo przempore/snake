@@ -1,3 +1,5 @@
+mod snake;
+
 extern crate ncurses;
 
 use std::char;
@@ -20,37 +22,6 @@ fn print_board() {
   addstr(&line);
 }
 
-struct Snake{
-    x: i32,
-    y: i32,
-}
-
-impl Snake {
-    fn new() -> Snake {
-        Snake {
-            x: 5,
-            y: 5,
-        }
-    }
-
-    fn print(&self) {
-        mv(self.y, self.x);
-        addstr("&");
-        mv(13, 0);
-        addstr(&format!("x = {}, y = {}", self.x, self.y));
-    }
-
-    fn move_it(&mut self, key:char) -> bool {
-      match key {
-          'w' => { if self.y > 1 { self.y -= 1; } return false; },
-          'a' => { if self.x > 2 { self.x -= 1; } return false; },
-          's' => { if self.y < 11 { self.y += 1; } return false; },
-          'd' => { if self.x < 37 { self.x += 1; } return false; },
-          'x' => { return true; }
-          _ => { return false; }
-      }
-    }
-}
 
 fn main() {
   initscr();
@@ -59,7 +30,7 @@ fn main() {
   keypad(stdscr(), true);
   noecho();
 
-  let mut snake = Snake::new();
+  let mut snake = snake::Snake::new();
 
   loop {
       clear();
