@@ -20,25 +20,36 @@ fn print_board() {
   addstr(&line);
 }
 
-fn print_snake(x: i32, y: i32) {
-    mv(y, x);
-    addstr("&");
-    mv(13, 0);
-    addstr(&format!("x = {}, y = {}", x, y));
-}
-
-trait MoveIt {
-  fn move_it(&self);
-}
-
 struct Snake{
-    //x: i32,
-    //y: i32,
+    x: i32,
+    y: i32,
 }
 
-impl MoveIt for Snake {
-  fn move_it(&self) {
-  }
+impl Snake {
+    fn new() -> Snake {
+        Snake {
+            x: 5,
+            y: 5,
+        }
+    }
+
+    fn print(&self) {
+        mv(self.y, self.x);
+        addstr("&");
+        mv(13, 0);
+        addstr(&format!("x = {}, y = {}", self.x, self.y));
+    }
+
+    fn move_it(&mut self, key:char) -> bool {
+      match key {
+          'w' => { if self.y > 1 { self.y -= 1; } return false; },
+          'a' => { if self.x > 2 { self.x -= 1; } return false; },
+          's' => { if self.y < 11 { self.y += 1; } return false; },
+          'd' => { if self.x < 37 { self.x += 1; } return false; },
+          'x' => { return true; }
+          _ => { return false; }
+      }
+    }
 }
 
 fn main() {
@@ -48,22 +59,16 @@ fn main() {
   keypad(stdscr(), true);
   noecho();
 
-  let mut x:i32 = 5;
-  let mut y:i32 = 5;
+  let mut snake = Snake::new();
 
   loop {
       clear();
       print_board();
-      print_snake(x, y);
-      mv(13, 0);
-      match getch() as u8 as char {
-          'w' => { if y > 1 { y -= 1; } },
-          'a' => { if x > 2 { x -= 1; } },
-          's' => { if y < 11 { y += 1; } },
-          'd' => { if x < 37 { x += 1; } },
-          'x' => { break; },
-          _ => { continue; },
+      snake.print();
+      if snake.move_it(getch() as u8 as char) {
+          break;
       }
+      mv(13, 0);
   }
 
   getch();
