@@ -1,4 +1,4 @@
 .gitignore
 rust/target
-rust/
 rust/rusty-tags.vi
+*.swp

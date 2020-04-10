@@ -1,36 +1,15 @@
 mod snake;
-
-extern crate ncurses;
+mod ncurses_utils;
 
 use std::char;
 use ncurses::*;
-
-fn print_board() {
-  let line = std::iter::repeat("=").take(40).collect::<String>();
-  let boarder = String::from("||");
-  let between_boarders = std::iter::repeat(" ").take(36).collect::<String>();
-  let boarders = format!("{}{}{}", boarder, between_boarders, boarder);
-
-  addstr(&line);
-  let mut n = 1;
-  for _ in 0..11 {
-    mv(n, 0);
-    addstr(&boarders);
-    n += 1;
-  }
-  mv(n, 0);
-  addstr(&line);
-}
-
+use ncurses_utils::*;
+use snake::*;
 
 fn main() {
-  initscr();
-  raw();
+  init_ncurses();
 
-  keypad(stdscr(), true);
-  noecho();
-
-  let mut snake = snake::Snake::new();
+  let mut snake = Snake::new();
 
   loop {
       clear();
@@ -42,6 +21,6 @@ fn main() {
       mv(13, 0);
   }
 
-  getch();
-  endwin();
+  finish_ncurses();
+
 }
