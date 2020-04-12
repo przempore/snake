@@ -14,8 +14,10 @@ fn main() {
   loop {
       clear();
       print_board();
+      snake.move_it();
       snake.print();
-      if snake.move_it(getch() as u8 as char) {
+      timeout(500);
+      if snake.change_dir(getch() as u8 as char) {
           break;
       }
       mv(13, 0);

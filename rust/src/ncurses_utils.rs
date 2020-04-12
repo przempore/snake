@@ -1,5 +1,10 @@
 extern crate ncurses;
+extern crate rand;
+
 use ncurses::*;
+use rand::*;
+
+const BOARD_LENGHT: u32 = 11;
 
 pub fn init_ncurses() {
   initscr();
@@ -7,6 +12,11 @@ pub fn init_ncurses() {
 
   keypad(stdscr(), true);
   noecho();
+}
+
+pub fn get_new_food(start: u32, end: u32) -> u32 {
+  let mut rng = rand::thread_rng();
+  rng.gen_range(start, end) as u32
 }
 
 pub fn print_board() {
@@ -17,7 +27,7 @@ pub fn print_board() {
 
   addstr(&line);
   let mut n = 1;
-  for _ in 0..11 {
+  for _ in 0..BOARD_LENGHT {
     mv(n, 0);
     addstr(&boarders);
     n += 1;
