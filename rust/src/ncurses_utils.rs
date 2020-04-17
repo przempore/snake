@@ -1,6 +1,3 @@
-extern crate ncurses;
-extern crate rand;
-
 use ncurses::*;
 
 const BOARD_LENGHT: u32 = 11;

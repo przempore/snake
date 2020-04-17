@@ -1,11 +1,5 @@
 mod ncurses_utils;
-mod snake;
 mod board;
-
-use std::char;
-use ncurses_utils::*;
-use snake::*;
-use board::*;
 
 const DEELAY_FOR_KEY: i32 = 500;
 

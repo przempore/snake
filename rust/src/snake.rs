@@ -1,8 +1,7 @@
-extern crate ncurses;
-
 use std::char;
 use std::ops::{AddAssign, Add};
-use ncurses::*;
+
+use crate::ncurses_utils::*;
 
 const START_POSITION: Point = Point {x: 5, y:5};
 const STEP_UP: Point = Point { x: 0, y: -1 };
@@ -45,14 +44,10 @@ impl Snake {
     }
 
     pub fn print(&self) {
-        // NCursesUtils::move_pointer(self.position.y, self.position.x);
-        mv(self.position.y, self.position.x);
-        addstr("X");
-        // NCursesUtils::add_string("X");
-        // NCursesUtils::move_pointer(13, 0);
-        mv(13, 0);
-        // NCursesUtils::add_string(&format!("x = {}, y = {}", self.position.x, self.position.y));
-        addstr(&format!("x = {}, y = {}", self.position.x, self.position.y));
+        move_pointer(self.position.y, self.position.x);
+        add_string("X");
+        move_pointer(13, 0);
+        add_string(&format!("x = {}, y = {}", self.position.x, self.position.y));
     }
 
     fn check_boarder_collisions(&self) -> bool {

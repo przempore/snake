@@ -1,14 +1,9 @@
-// mod ncurses_utils;
-extern crate ncurses;
-
-use ncurses::*;
+use crate::ncurses_utils::*;
 
 const BOARD_SIZE: usize = 40;
 // const BOARD_WIDTH: u32 = 36;
 // const BOARD_HIGHT: u32 = 36;
 const BOARD_LENGHT: u32 = 11;
-
-// use rand::*;
 
 pub fn print_board() {
   let line = std::iter::repeat("=").take(BOARD_SIZE).collect::<String>();
@@ -19,20 +14,15 @@ pub fn print_board() {
                                 .collect::<String>();
   let boarders = format!("{}{}{}", boarder, between_boarders, boarder);
 
-  // NCursesUtils::add_string(&line);
-  addstr(&line);
+  add_string(&line);
   let mut n = 1;
   for _ in 0..BOARD_LENGHT {
-    mv(n, 0);
-    // NCursesUtils::move_pointer(n,  0);
-    // NCursesUtils::add_string(&boarders);
-    addstr(&boarders);
+    move_pointer(n,  0);
+    add_string(&boarders);
     n += 1;
   }
-  // NCursesUtils::move_pointer(n, 0);
-    mv(n, 0);
-  // NCursesUtils::add_string(&line);
-  addstr(&line);
+  move_pointer(n, 0);
+  add_string(&line);
 }
 
 
