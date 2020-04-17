@@ -1,6 +1,14 @@
+extern crate ncurses;
+
 use std::char;
+use std::ops::{AddAssign, Add};
 use ncurses::*;
-use std::ops::AddAssign;
+
+const START_POSITION: Point = Point {x: 5, y:5};
+const STEP_UP: Point = Point { x: 0, y: -1 };
+const STEP_LEFT: Point = Point { x: -1, y: 0 };
+const STEP_DOWN: Point = Point { x: 0, y: 1 };
+const STEP_RIGHT: Point = Point { x: 1, y: 0 };
 
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub struct Point {
@@ -15,20 +23,35 @@ impl AddAssign for Point {
     }
 }
 
+impl Add for Point {
+    type Output = Self;
+
+    fn add(self, other: Self) -> Self {
+        Self {
+            x: self.x + other.x,
+            y: self.y + other.y
+        }
+    }
+}
+
 pub struct Snake{
     position: Point,
-    direction: Point,
+    step_direction: Point,
 }
 
 impl Snake {
     pub fn new() -> Snake {
-        Snake{position: Point {x: 5, y: 5}, direction: Point{x: 0, y: -1}}
+        Snake{position: START_POSITION, step_direction: STEP_RIGHT}
     }
 
     pub fn print(&self) {
+        // NCursesUtils::move_pointer(self.position.y, self.position.x);
         mv(self.position.y, self.position.x);
         addstr("X");
+        // NCursesUtils::add_string("X");
+        // NCursesUtils::move_pointer(13, 0);
         mv(13, 0);
+        // NCursesUtils::add_string(&format!("x = {}, y = {}", self.position.x, self.position.y));
         addstr(&format!("x = {}, y = {}", self.position.x, self.position.y));
     }
 
@@ -39,25 +62,42 @@ impl Snake {
         return false;
     }
 
+    pub fn get_possition(&self) -> Point {
+        self.position
+    }
+
     pub fn move_it(&mut self) {
         if self.check_boarder_collisions() {
             return;
         }
 
-        self.position += self.direction;
+        self.position += self.step_direction;
     }
 
     pub fn change_dir(&mut self, key:char) -> bool {
       match key {
-          'w' => { self.direction = Point { x: 0, y: -1 }; },
-          'a' => { self.direction = Point { x: -1, y: 0 }; },
-          's' => { self.direction = Point { x: 0, y: 1 }; },
-          'd' => { self.direction = Point { x: 1, y: 0 }; },
+          'w' => { self.step_direction = STEP_UP; },
+          'a' => { self.step_direction = STEP_LEFT; },
+          's' => { self.step_direction = STEP_DOWN; },
+          'd' => { self.step_direction = STEP_RIGHT; },
 
           'x' => { return true; }
           _ => { return false; }
       }
       return false;
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn should_move_one_step_right() {
+        let mut snake = Snake::new();
+        assert_eq!(START_POSITION, snake.get_possition());
+
+        snake.move_it();
+        assert_eq!(START_POSITION + Point {x: 1, y: 0}, snake.get_possition());
     }
 }
 
