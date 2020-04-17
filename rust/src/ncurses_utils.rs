@@ -5,7 +5,7 @@ use ncurses::*;
 
 const BOARD_LENGHT: u32 = 11;
 
-fn init_ncurses() {
+pub fn init_ncurses() {
   initscr();
   raw();
 
@@ -26,3 +26,18 @@ pub fn move_pointer(y: i32, x: i32) -> i32 {
   mv(y, x)
 }
 
+pub fn getchar_timeout(delay: i32) {
+  timeout(delay);
+}
+
+pub fn clear_screen() {
+  clear();
+}
+
+pub fn getchar() -> i32 {
+  getch()
+}
+
+pub fn release_screen() {
+  endwin();
+}
