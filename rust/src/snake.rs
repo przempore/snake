@@ -54,15 +54,10 @@ impl Snake {
     }
 
     fn check_collisions(&self) -> bool {
-        // todo: fix me
-        if self.get_head().lt(&Point {x: (board::SIDE_BOARDER_SIZE as i32),
-                                      y: (board::WIDTH - board::SIDE_BOARDER_SIZE) as i32})
-         || self.get_head().gt(&Point {x: (board::TOP_BOTTOM_BOARDER_SIZE as i32),
-                                      y: (board::HIGHT - board::TOP_BOTTOM_BOARDER_SIZE) as i32}) {
-            return true;
-        }
-
-        false
+        self.get_head().x < board::SIDE_BOARDER_SIZE as i32
+        || self.get_head().x > (board::WIDTH - board::SIDE_BOARDER_SIZE - 1) as i32
+        || self.get_head().y <  board::TOP_BOTTOM_BOARDER_SIZE as i32
+        || self.get_head().y > (board::HIGHT - board::TOP_BOTTOM_BOARDER_SIZE * 2) as i32
     }
 
     fn get_head(&self) -> Point {
