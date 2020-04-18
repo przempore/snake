@@ -1,6 +1,8 @@
 mod ncurses_utils;
 mod board;
 mod snake;
+mod point;
+
 
 use std::char;
 use ncurses_utils::*;
