@@ -38,3 +38,7 @@ pub fn getchar() -> i32 {
 pub fn release_screen() {
   endwin();
 }
+
+pub fn clear_screen_point(y: i32, x: i32) -> i32 {
+  mvdelch(y, x)
+}

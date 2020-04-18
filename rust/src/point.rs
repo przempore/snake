@@ -1,6 +1,7 @@
 use std::ops::{AddAssign, Add};
+use std::cmp::Ordering;
 
-#[derive(Debug, PartialEq, Copy, Clone)]
+#[derive(Debug, Eq, Copy, Clone)]
 pub struct Point {
     pub x: i32,
     pub y: i32,
@@ -21,5 +22,28 @@ impl Add for Point {
             x: self.x + other.x,
             y: self.y + other.y
         }
+    }
+}
+
+impl PartialOrd for Point {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        if self.x == other.x && self.y == other.y { Some(Ordering::Equal) }
+        else if self.x < other.x && self.y < other.y { Some(Ordering::Less) }
+        else if self.x > other.x && self.y > other.y { Some(Ordering::Greater) }
+        else { None }
+    }
+}
+
+impl Ord for Point {
+    fn cmp(&self, other: &Self) -> Ordering {
+        if self.x < other.x && self.y < other.y { Ordering::Less }
+        else if self.x > other.x && self.y > other.y { Ordering::Greater }
+        else { Ordering::Equal }
+    }
+}
+
+impl PartialEq for Point {
+    fn eq(&self, other: &Self) -> bool {
+        self.x == other.x && self.y == other.y
     }
 }
