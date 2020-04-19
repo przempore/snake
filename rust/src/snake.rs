@@ -75,7 +75,7 @@ impl Snake {
           'd' => { self.step_direction = STEP_RIGHT; },
 
           'x' => { return true; }
-          _ => { return false; }
+           _ => { return false; }
       }
       return false;
     }

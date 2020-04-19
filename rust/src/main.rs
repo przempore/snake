@@ -8,7 +8,7 @@ use ncurses_utils::*;
 use snake::*;
 use board::*;
 
-const DEELAY_FOR_KEY: i32 = 500;
+const DEELAY_FOR_KEY: i32 = 250;
 
 fn main() {
   init_ncurses();
@@ -19,12 +19,12 @@ fn main() {
   loop {
       clear_screen();
       print_board();
-      if !snake.move_it() {
-        break;
-      }
       snake.print();
       if snake.change_dir(getchar() as u8 as char) {
           break;
+      }
+      if !snake.move_it() {
+        break;
       }
 
       move_pointer(13, 0);
