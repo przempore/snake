@@ -9,6 +9,7 @@ use std::collections::LinkedList;
 
 const STARTING_LENGTH: u32 = 3;
 const SIGN: &str = "O";
+const FAIL_SIGN: &str = "X";
 const START_POSITION: Point = Point {x: 15, y:5};
 
 const STEP_UP: Point = Point { x: 0, y: -1 };
@@ -53,6 +54,7 @@ impl Snake {
     pub fn move_it(&mut self) -> bool {
         if self.check_collisions() {
             self.print_collision();
+            self.print_fail_head();
             return false;
         }
 
@@ -101,6 +103,11 @@ impl Snake {
     fn print_head_position(&self) {
         move_pointer(board::HIGHT as i32, 0);
         add_string(&format!("x = {}, y = {}", self.get_head().x, self.get_head().y));
+    }
+
+    fn print_fail_head(&self) {
+        move_pointer(self.get_head().y, self.get_head().x);
+        add_string(FAIL_SIGN);
     }
 }
 
