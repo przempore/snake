@@ -10,7 +10,10 @@ use std::collections::LinkedList;
 const STARTING_LENGTH: u32 = 3;
 const SIGN: &str = "O";
 const FAIL_SIGN: &str = "X";
-const START_POSITION: Point = Point {x: 15, y:5};
+const START_POSITION: Point = Point {
+    x: (board::WIDTH / 2) as i32,
+    y: (board::HIGHT / 2) as i32
+};
 
 const STEP_UP: Point = Point { x: 0, y: -1 };
 const STEP_LEFT: Point = Point { x: -1, y: 0 };
