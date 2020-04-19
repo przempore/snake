@@ -43,12 +43,12 @@ impl Snake {
     pub fn print(&self) {
         let mut body_iter = self.body.iter();
         loop {
-        match body_iter.next() {
-            Some(pos) => {
-                move_pointer(pos.y, pos.x);
-                add_string(&self.body_sign);
-            },
-            None => { break }
+            match body_iter.next() {
+                Some(pos) => {
+                    move_pointer(pos.y, pos.x);
+                    add_string(&self.body_sign);
+                },
+                None => { break }
             }
         }
         self.print_head_position();
@@ -129,7 +129,7 @@ mod tests {
     #[test]
     fn should_collide_right_boarder_test() {
         let mut snake = Snake::new();
-        for _ in 0..20 {
+        for _ in 0..15 { // todo: find value from board::
             assert!(snake.move_it());
         }
         assert!(!snake.move_it());
@@ -139,7 +139,7 @@ mod tests {
     fn should_collide_top_boarder_test() {
         let mut snake = Snake::new();
         snake.change_dir('w');
-        for _ in 0..5 {
+        for _ in 0..6 { // todo: find value from board::
             assert!(snake.move_it());
         }
         assert!(!snake.move_it());
@@ -149,7 +149,7 @@ mod tests {
     fn should_collide_bottom_boarder_test() {
         let mut snake = Snake::new();
         snake.change_dir('s');
-        for _ in 0..7 {
+        for _ in 0..6 { // todo: find value from board::
             assert!(snake.move_it());
         }
         assert!(!snake.move_it());
@@ -159,7 +159,7 @@ mod tests {
     fn should_collide_left_boarder_test() {
         let mut snake = Snake::new();
         snake.change_dir('a');
-        for _ in 0..17 {
+        for _ in 0..22 { // todo: find value from board::
             assert!(snake.move_it());
         }
         assert!(!snake.move_it());
