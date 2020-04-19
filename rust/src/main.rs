@@ -18,7 +18,10 @@ fn main() {
   loop {
       clear_screen();
       print_board();
-      snake.move_it();
+      if snake.move_it() {
+        getchar();
+        break;
+      }
       snake.print();
       getchar_timeout(DEELAY_FOR_KEY);
       if snake.change_dir(getchar() as u8 as char) {
