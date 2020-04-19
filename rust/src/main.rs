@@ -15,21 +15,23 @@ fn main() {
 
   let mut snake = Snake::new();
 
+  getchar_timeout(DEELAY_FOR_KEY);
   loop {
       clear_screen();
       print_board();
-      if snake.move_it() {
-        getchar();
+      if !snake.move_it() {
         break;
       }
       snake.print();
-      getchar_timeout(DEELAY_FOR_KEY);
       if snake.change_dir(getchar() as u8 as char) {
           break;
       }
 
       move_pointer(13, 0);
   }
+
+  getchar_timeout(-1);
+  getchar();
 
   release_screen();
 

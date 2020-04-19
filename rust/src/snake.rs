@@ -94,7 +94,7 @@ impl Snake {
     }
 
     fn print_collision(&self) {
-        move_pointer((board::HIGHT + 1) as i32, 0);
+        move_pointer((board::HIGHT / 2) as i32, (board::WIDTH / 6) as i32);
         add_string(&format!("Board collision! Game over!"));
     }
 
