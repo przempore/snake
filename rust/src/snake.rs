@@ -36,6 +36,10 @@ impl Snake {
         snake
     }
 
+    fn set_position(pos: &Point) {
+
+    }
+
     pub fn print(&self) {
         let mut body_iter = self.body.iter();
         loop {
@@ -47,8 +51,6 @@ impl Snake {
             None => { break }
             }
         }
-        // move_pointer(self.head_position.y, self.head_position.x);
-        // add_string(&self.body_sign);
         move_pointer(board::HIGHT as i32, 0);
         add_string(&format!("x = {}, y = {}", self.get_head().x, self.get_head().y));
     }
@@ -104,6 +106,53 @@ mod tests {
 
         snake.move_it();
         assert_eq!(START_POSITION + Point {x: 4, y: 0}, snake.get_head());
+    }
+
+    #[test]
+    fn should_collide_right_boarder_test() {
+        let mut snake = Snake::new();
+        for _ in 0..19 {
+            snake.move_it();
+            assert!(!snake.check_collisions());
+        }
+        snake.move_it();
+        assert!(snake.check_collisions());
+    }
+
+    #[test]
+    fn should_collide_top_boarder_test() {
+        let mut snake = Snake::new();
+        snake.change_dir('w');
+        for _ in 0..4 {
+            snake.move_it();
+            assert!(!snake.check_collisions());
+        }
+        snake.move_it();
+        assert!(snake.check_collisions());
+    }
+    
+    #[test]
+    fn should_collide_bottom_boarder_test() {
+        let mut snake = Snake::new();
+        snake.change_dir('s');
+        for _ in 0..6 {
+            snake.move_it();
+            assert!(!snake.check_collisions());
+        }
+        snake.move_it();
+        assert!(snake.check_collisions());
+    }
+    
+    #[test]
+    fn should_collide_left_boarder_test() {
+        let mut snake = Snake::new();
+        snake.change_dir('a');
+        for _ in 0..16 {
+            snake.move_it();
+            assert!(!snake.check_collisions());
+        }
+        snake.move_it();
+        assert!(snake.check_collisions());
     }
 }
 
