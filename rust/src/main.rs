@@ -12,11 +12,8 @@ const DEELAY_FOR_KEY: i32 = 250;
 
 fn main() {
   init_ncurses();
-
   game_loop();
-
   wait_for_x_to_exit();
-
   release_screen();
 }
 
@@ -26,7 +23,7 @@ fn game_loop() {
   getchar_timeout(DEELAY_FOR_KEY);
   loop {
       clear_screen();
-      print_board();
+      Board::print_board();
       snake.print();
       if snake.change_dir(getchar() as u8 as char) {
           break;
@@ -35,7 +32,7 @@ fn game_loop() {
         break;
       }
 
-      move_pointer(13, 0);
+      move_pointer(board::HIGHT as i32, 0);
   }
 }
 
