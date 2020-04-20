@@ -13,6 +13,14 @@ const DEELAY_FOR_KEY: i32 = 250;
 fn main() {
   init_ncurses();
 
+  game_loop();
+
+  wait_for_x_to_exit();
+
+  release_screen();
+}
+
+fn game_loop() {
   let mut snake = Snake::new();
 
   getchar_timeout(DEELAY_FOR_KEY);
@@ -29,10 +37,18 @@ fn main() {
 
       move_pointer(13, 0);
   }
+}
 
+fn wait_for_x_to_exit() {
   getchar_timeout(-1);
-  getchar();
-
-  release_screen();
-
+  loop {
+    let c = getchar();
+    match  c as u8 as char {
+      'x' => break,
+      _ => {
+        clear_line(13, 0);
+        add_string("To exit type x");
+      },
+    }
+  }
 }

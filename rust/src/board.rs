@@ -1,4 +1,8 @@
+use rand;
+
 use crate::ncurses_utils::*;
+use crate::point::*;
+use rand::Rng;
 
 pub const WIDTH: usize = 40;
 pub const SIDE_BOARDER_SIZE: usize = 2;
@@ -26,8 +30,19 @@ pub fn print_board() {
   add_string(&line);
 }
 
+pub fn get_new_food(range_x: (u32, u32), range_y: (u32, u32)) -> Point {
+  let (start_x, end_x) = range_x;
+  let (start_y, end_y) = range_y;
+   let mut rng = rand::thread_rng();
+   Point {x: rng.gen_range(start_x, end_x) as i32,
+          y: rng.gen_range(start_y, end_y) as i32}
+}
 
-// pub fn get_new_food(start: u32, end: u32) -> u32 {
-//   let mut rng = rand::thread_rng();
-//   rng.gen_range(start, end) as u32
-// }
+#[cfg(test)]
+mod tests {
+  use super::*;
+
+  #[test]
+  fn should_range_be_between() {
+  }
+}
