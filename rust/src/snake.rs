@@ -20,21 +20,22 @@ const STEP_LEFT: Point = Point { x: -1, y: 0 };
 const STEP_DOWN: Point = Point { x: 0, y: 1 };
 const STEP_RIGHT: Point = Point { x: 1, y: 0 };
 
-pub struct Snake {
+pub struct Snake<'a> {
     body: LinkedList<Point>,
     step_direction: Point,
     body_sign: std::string::String,
-    callback: Box<dyn FnMut()>,
+    callback: &'a dyn Fn(),
 }
 
-impl Snake
-{
-    pub fn new() -> Snake {
+fn empty() {}
+
+impl<'a> Snake <'a> {
+    pub fn new() -> Self {
         let mut snake  = Snake {
             body: LinkedList::new(),
             step_direction: STEP_RIGHT,
             body_sign: String::from(SIGN),
-            callback: Box::new(||{}),
+            callback: &empty,
         };
         for _ in 0..STARTING_LENGTH {
             snake.body.push_front(snake.get_head() + STEP_RIGHT);
@@ -83,8 +84,8 @@ impl Snake
       return false;
     }
 
-    pub fn register(&mut self, c: impl FnMut() + 'static) {
-        self.callback = Box::new(c);
+    pub fn register(&mut self, c: &'a dyn Fn()) {
+        self.callback = c;
     }
 
     fn check_collisions(&self) -> bool {
@@ -151,7 +152,7 @@ mod tests {
         }
         assert!(!snake.move_it());
     }
-    
+
     #[test]
     fn should_collide_bottom_boarder_test() {
         let mut snake = Snake::new();
@@ -161,7 +162,7 @@ mod tests {
         }
         assert!(!snake.move_it());
     }
-    
+
     #[test]
     fn should_collide_left_boarder_test() {
         let mut snake = Snake::new();
