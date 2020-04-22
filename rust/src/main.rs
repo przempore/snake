@@ -18,8 +18,9 @@ fn main() {
 }
 
 fn game_loop() {
-  let mut snake = Snake::new();
   let mut board = Board::new();
+  let mut snake = Snake::new();
+  // snake.register(Box::new(||board.draw_new_food()));
 
   getchar_timeout(DEELAY_FOR_KEY);
   loop {
@@ -44,7 +45,7 @@ fn wait_for_x_to_exit() {
     match c {
       'x' => break,
       _ => {
-        clear_line(13, 0);
+        clear_line(board::HIGHT as i32, 0);
         add_string("To exit type x");
       },
     }

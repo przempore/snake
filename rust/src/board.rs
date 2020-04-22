@@ -14,15 +14,13 @@ const FOOD_SIGN: &str = "&";
 
 pub struct Board {
   food: Point,
-  food_sign: std::string::String,
 }
 
 impl Board {
   pub fn new() -> Board {
     Board {
-      food: Board::draw_new_food((SIDE_BOARDER_SIZE as u32, (WIDTH - SIDE_BOARDER_SIZE) as u32),
-                                  (TOP_BOTTOM_BOARDER_SIZE as u32, (HIGHT - TOP_BOTTOM_BOARDER_SIZE) as u32)),
-      food_sign: String::from(FOOD_SIGN),
+      food: Board::draw_food((SIDE_BOARDER_SIZE as u32, (WIDTH - SIDE_BOARDER_SIZE) as u32),
+                             (TOP_BOTTOM_BOARDER_SIZE as u32, (HIGHT - TOP_BOTTOM_BOARDER_SIZE) as u32)),
     }
   }
 
@@ -44,15 +42,20 @@ impl Board {
     move_pointer(n, 0);
     add_string(&line);
     move_pointer(self.food.y, self.food.x);
-    add_string(&self.food_sign);
+    add_string(&FOOD_SIGN);
   }
 
-  pub fn draw_new_food(range_x: (u32, u32), range_y: (u32, u32)) -> Point {
+  fn draw_food(range_x: (u32, u32), range_y: (u32, u32)) -> Point {
     let (start_x, end_x) = range_x;
     let (start_y, end_y) = range_y;
     let mut rng = rand::thread_rng();
     Point {x: rng.gen_range(start_x, end_x) as i32,
             y: rng.gen_range(start_y, end_y) as i32}
+  }
+
+  pub fn draw_new_food(&mut self) {
+    self.food = Board::draw_food((SIDE_BOARDER_SIZE as u32, (WIDTH - SIDE_BOARDER_SIZE) as u32),
+                             (TOP_BOTTOM_BOARDER_SIZE as u32, (HIGHT - TOP_BOTTOM_BOARDER_SIZE) as u32));
   }
 }
 
@@ -62,8 +65,8 @@ mod tests {
 
   #[test]
   fn should_range_be_between() {
-    Board::draw_new_food((SIDE_BOARDER_SIZE as u32, (WIDTH - SIDE_BOARDER_SIZE) as u32),
-                          (TOP_BOTTOM_BOARDER_SIZE as u32, (HIGHT - TOP_BOTTOM_BOARDER_SIZE) as u32));
+    Board::draw_food((SIDE_BOARDER_SIZE as u32, (WIDTH - SIDE_BOARDER_SIZE) as u32),
+                     (TOP_BOTTOM_BOARDER_SIZE as u32, (HIGHT - TOP_BOTTOM_BOARDER_SIZE) as u32));
 
   }
 }

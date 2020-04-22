@@ -20,18 +20,21 @@ const STEP_LEFT: Point = Point { x: -1, y: 0 };
 const STEP_DOWN: Point = Point { x: 0, y: 1 };
 const STEP_RIGHT: Point = Point { x: 1, y: 0 };
 
-pub struct Snake{
+pub struct Snake {
     body: LinkedList<Point>,
     step_direction: Point,
     body_sign: std::string::String,
+    callback: Box<dyn FnMut()>,
 }
 
-impl Snake {
+impl Snake
+{
     pub fn new() -> Snake {
-        let mut snake  = Snake{
+        let mut snake  = Snake {
             body: LinkedList::new(),
             step_direction: STEP_RIGHT,
             body_sign: String::from(SIGN),
+            callback: Box::new(||{}),
         };
         for _ in 0..STARTING_LENGTH {
             snake.body.push_front(snake.get_head() + STEP_RIGHT);
@@ -78,6 +81,10 @@ impl Snake {
            _ => { return false; }
       }
       return false;
+    }
+
+    pub fn register(&mut self, c: impl FnMut() + 'static) {
+        self.callback = Box::new(c);
     }
 
     fn check_collisions(&self) -> bool {
