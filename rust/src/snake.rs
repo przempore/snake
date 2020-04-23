@@ -24,7 +24,7 @@ pub struct Snake<'a> {
     body: LinkedList<Point>,
     step_direction: Point,
     body_sign: std::string::String,
-    callback: &'a dyn Fn(),
+    callback: &'a dyn FnMut(),
 }
 
 fn empty() {}
@@ -84,7 +84,7 @@ impl<'a> Snake <'a> {
       return false;
     }
 
-    pub fn register(&mut self, c: &'a dyn Fn()) {
+    pub fn register(&mut self, c: &'a dyn FnMut()) {
         self.callback = c;
     }
 

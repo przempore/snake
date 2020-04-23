@@ -24,7 +24,7 @@ impl Board {
     }
   }
 
-  pub fn print_board(&self) {
+  pub fn print_board(&mut self) {
     let line = std::iter::repeat("=").take(WIDTH).collect::<String>();
     let boarder = String::from("||");
     let between_boarders = std::iter::repeat(" ")

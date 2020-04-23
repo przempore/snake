@@ -20,7 +20,8 @@ fn main() {
 fn game_loop() {
   let mut board = Board::new();
   let mut snake = Snake::new();
-  // snake.register(Box::new(||board.draw_new_food()));
+  // let callback = || board.draw_new_food();
+  // snake.register(&callback);
 
   getchar_timeout(DEELAY_FOR_KEY);
   loop {
