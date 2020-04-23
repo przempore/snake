@@ -46,15 +46,15 @@ impl Snake {
         self.board.print_board();
         let mut body_iter = self.body.iter();
         loop {
-            match body_iter.next() {
-                Some(pos) => {
+            if let Some(pos) = body_iter.next() {
                     move_pointer(pos.y, pos.x);
                     add_string(&self.body_sign);
-                },
-                None => { break }
+            } else {
+                break
             }
         }
         self.print_head_position();
+        self.print_score();
     }
 
     pub fn move_it(&mut self) -> bool {
@@ -121,6 +121,11 @@ impl Snake {
     fn print_fail_head(&self) {
         move_pointer(self.get_head().y, self.get_head().x);
         add_string(FAIL_SIGN);
+    }
+
+    fn print_score(&self) {
+        move_pointer(board::HIGHT as i32, (board::WIDTH / 2) as i32);
+        add_string(&format!("score: {}", self.body.len()));
     }
 }
 
