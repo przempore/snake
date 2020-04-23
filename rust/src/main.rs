@@ -6,7 +6,6 @@ mod point;
 use std::char;
 use ncurses_utils::*;
 use snake::*;
-use board::*;
 
 const DEELAY_FOR_KEY: i32 = 250;
 
@@ -23,7 +22,6 @@ fn game_loop() {
   getchar_timeout(DEELAY_FOR_KEY);
   loop {
       clear_screen();
-      Board::print_board();
       snake.print();
       if snake.change_dir(getchar() as u8 as char) {
           break;
@@ -39,11 +37,11 @@ fn game_loop() {
 fn wait_for_x_to_exit() {
   getchar_timeout(-1);
   loop {
-    let c = getchar();
-    match  c as u8 as char {
+    let c = getchar() as u8 as char;
+    match c {
       'x' => break,
       _ => {
-        clear_line(13, 0);
+        clear_line(board::HIGHT as i32, 0);
         add_string("To exit type x");
       },
     }
