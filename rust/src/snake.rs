@@ -20,22 +20,20 @@ const STEP_LEFT: Point = Point { x: -1, y: 0 };
 const STEP_DOWN: Point = Point { x: 0, y: 1 };
 const STEP_RIGHT: Point = Point { x: 1, y: 0 };
 
-pub struct Snake<'a> {
+pub struct Snake {
     body: LinkedList<Point>,
     step_direction: Point,
     body_sign: std::string::String,
-    callback: &'a dyn FnMut(),
+    board: board::Board,
 }
 
-fn empty() {}
-
-impl<'a> Snake <'a> {
+impl Snake {
     pub fn new() -> Self {
         let mut snake  = Snake {
             body: LinkedList::new(),
             step_direction: STEP_RIGHT,
             body_sign: String::from(SIGN),
-            callback: &empty,
+            board: board::Board::new(),
         };
         for _ in 0..STARTING_LENGTH {
             snake.body.push_front(snake.get_head() + STEP_RIGHT);
@@ -44,7 +42,8 @@ impl<'a> Snake <'a> {
         snake
     }
 
-    pub fn print(&self) {
+    pub fn print(&mut self) {
+        self.board.print_board();
         let mut body_iter = self.body.iter();
         loop {
             match body_iter.next() {
@@ -59,10 +58,13 @@ impl<'a> Snake <'a> {
     }
 
     pub fn move_it(&mut self) -> bool {
-        if self.check_collisions() {
+        if self.check_boarder_collisions() {
             self.print_collision();
             self.print_fail_head();
             return false;
+        } else if self.check_food_collision() {
+            self.board.draw_new_food();
+            self.body.push_front(self.get_head() + self.step_direction);
         }
 
         self.body.push_front(self.get_head() + self.step_direction);
@@ -82,13 +84,13 @@ impl<'a> Snake <'a> {
            _ => { return false; }
       }
       return false;
+    } 
+
+    fn check_food_collision(&self) -> bool {
+        self.get_head() == self.board.get_food()
     }
 
-    pub fn register(&mut self, c: &'a dyn FnMut()) {
-        self.callback = c;
-    }
-
-    fn check_collisions(&self) -> bool {
+    fn check_boarder_collisions(&self) -> bool {
         self.get_head().x < board::SIDE_BOARDER_SIZE as i32
         || self.get_head().x > (board::WIDTH - board::SIDE_BOARDER_SIZE - 1) as i32
         || self.get_head().y <  board::TOP_BOTTOM_BOARDER_SIZE as i32

@@ -6,7 +6,6 @@ mod point;
 use std::char;
 use ncurses_utils::*;
 use snake::*;
-use board::*;
 
 const DEELAY_FOR_KEY: i32 = 250;
 
@@ -18,15 +17,11 @@ fn main() {
 }
 
 fn game_loop() {
-  let mut board = Board::new();
   let mut snake = Snake::new();
-  // let callback = || board.draw_new_food();
-  // snake.register(&callback);
 
   getchar_timeout(DEELAY_FOR_KEY);
   loop {
       clear_screen();
-      board.print_board();
       snake.print();
       if snake.change_dir(getchar() as u8 as char) {
           break;

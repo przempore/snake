@@ -45,17 +45,21 @@ impl Board {
     add_string(&FOOD_SIGN);
   }
 
+  pub fn draw_new_food(&mut self) {
+    self.food = Board::draw_food((SIDE_BOARDER_SIZE as u32, (WIDTH - SIDE_BOARDER_SIZE) as u32),
+                             (TOP_BOTTOM_BOARDER_SIZE as u32, (HIGHT - TOP_BOTTOM_BOARDER_SIZE) as u32));
+  }
+
+  pub fn get_food(&self) -> Point {
+    self.food
+  }
+
   fn draw_food(range_x: (u32, u32), range_y: (u32, u32)) -> Point {
     let (start_x, end_x) = range_x;
     let (start_y, end_y) = range_y;
     let mut rng = rand::thread_rng();
     Point {x: rng.gen_range(start_x, end_x) as i32,
             y: rng.gen_range(start_y, end_y) as i32}
-  }
-
-  pub fn draw_new_food(&mut self) {
-    self.food = Board::draw_food((SIDE_BOARDER_SIZE as u32, (WIDTH - SIDE_BOARDER_SIZE) as u32),
-                             (TOP_BOTTOM_BOARDER_SIZE as u32, (HIGHT - TOP_BOTTOM_BOARDER_SIZE) as u32));
   }
 }
 
