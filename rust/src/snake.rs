@@ -109,8 +109,14 @@ impl Snake {
     }
 
     fn print_collision(&self) {
-        move_pointer((board::HIGHT / 2) as i32, (board::WIDTH / 6) as i32);
-        add_string(&format!("Board collision! Game over!"));
+        let collision_text = format!("Board collision!Game over!");
+        move_pointer((board::HIGHT / 2) as i32,
+                     (board::WIDTH / 2 - (collision_text.len() / 2)) as i32);
+        add_string(&collision_text);
+        let text = format!("score: {}", self.body.len());
+        move_pointer((board::HIGHT / 2 + 1)  as i32,
+                     (board::WIDTH / 2 - (text.len() / 2)) as i32);
+        add_string(&text);
     }
 
     fn print_head_position(&self) {
@@ -124,8 +130,10 @@ impl Snake {
     }
 
     fn print_score(&self) {
-        move_pointer(board::HIGHT as i32, (board::WIDTH / 2) as i32);
-        add_string(&format!("score: {}", self.body.len()));
+        let text = format!("score: {}", self.body.len());
+        move_pointer(board::HIGHT as i32, (board::WIDTH - text.len()) as i32);
+        add_string(&text);
+        move_pointer(0, 0);
     }
 }
 
