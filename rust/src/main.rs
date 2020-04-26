@@ -3,7 +3,6 @@ mod board;
 mod snake;
 mod point;
 
-use std::char;
 use ncurses_utils::*;
 use pancurses::{Input};
 use snake::*;
