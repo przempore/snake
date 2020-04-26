@@ -61,14 +61,16 @@ impl Snake {
         if self.check_boarder_collisions() {
             self.print_collision(pancurses);
             self.print_fail_head(pancurses);
-            return false;
-        } else if self.check_food_collision() {
-            self.board.draw_new_food();
-            self.body.push_front(self.get_head() + self.step_direction);
-        }
 
+            return false;
+        }
         self.body.push_front(self.get_head() + self.step_direction);
-        self.body.pop_back();
+
+        if self.check_food_collision() {
+            self.board.draw_new_food();
+        } else {
+            self.body.pop_back();
+        }
 
         return true;
     }
