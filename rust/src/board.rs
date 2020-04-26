@@ -24,7 +24,7 @@ impl Board {
     }
   }
 
-  pub fn print_board(&mut self) {
+  pub fn print_board(&mut self, pancurses: &Pancurses) {
     let line = std::iter::repeat("=").take(WIDTH).collect::<String>();
     let boarder = String::from("||");
     let between_boarders = std::iter::repeat(" ")
@@ -32,17 +32,17 @@ impl Board {
                                   .collect::<String>();
     let boarders = format!("{}{}{}", boarder, between_boarders, boarder);
 
-    add_string(&line);
+    pancurses.add_string(&line);
     let mut n = 1;
     for _ in 0..HIGHT_INSIDE_BOARD {
-      move_pointer(n,  0);
-      add_string(&boarders);
+      pancurses.move_pointer(n,  0);
+      pancurses.add_string(&boarders);
       n += 1;
     }
-    move_pointer(n, 0);
-    add_string(&line);
-    move_pointer(self.food.y, self.food.x);
-    add_string(&FOOD_SIGN);
+    pancurses.move_pointer(n, 0);
+    pancurses.add_string(&line);
+    pancurses.move_pointer(self.food.y, self.food.x);
+    pancurses.add_string(&FOOD_SIGN);
   }
 
   pub fn draw_new_food(&mut self) {

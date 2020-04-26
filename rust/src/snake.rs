@@ -42,25 +42,25 @@ impl Snake {
         snake
     }
 
-    pub fn print(&mut self) {
-        self.board.print_board();
+    pub fn print(&mut self, pancurses: &Pancurses) {
+        self.board.print_board(pancurses);
         let mut body_iter = self.body.iter();
         loop {
             if let Some(pos) = body_iter.next() {
-                    move_pointer(pos.y, pos.x);
-                    add_string(&self.body_sign);
+                    pancurses.move_pointer(pos.y, pos.x);
+                    pancurses.add_string(&self.body_sign);
             } else {
                 break
             }
         }
-        self.print_head_position();
-        self.print_score();
+        self.print_head_position(pancurses);
+        self.print_score(pancurses);
     }
 
-    pub fn move_it(&mut self) -> bool {
+    pub fn move_it(&mut self, pancurses: &Pancurses) -> bool {
         if self.check_boarder_collisions() {
-            self.print_collision();
-            self.print_fail_head();
+            self.print_collision(pancurses);
+            self.print_fail_head(pancurses);
             return false;
         } else if self.check_food_collision() {
             self.board.draw_new_food();
@@ -108,32 +108,32 @@ impl Snake {
         }
     }
 
-    fn print_collision(&self) {
+    fn print_collision(&self, pancurses: &Pancurses) {
         let collision_text = format!("Board collision!Game over!");
-        move_pointer((board::HIGHT / 2) as i32,
+        pancurses.move_pointer((board::HIGHT / 2) as i32,
                      (board::WIDTH / 2 - (collision_text.len() / 2)) as i32);
-        add_string(&collision_text);
+        pancurses.add_string(&collision_text);
         let text = format!("score: {}", self.body.len());
-        move_pointer((board::HIGHT / 2 + 1)  as i32,
+        pancurses.move_pointer((board::HIGHT / 2 + 1)  as i32,
                      (board::WIDTH / 2 - (text.len() / 2)) as i32);
-        add_string(&text);
+        pancurses.add_string(&text);
     }
 
-    fn print_head_position(&self) {
-        move_pointer(board::HIGHT as i32, 0);
-        add_string(&format!("x = {}, y = {}", self.get_head().x, self.get_head().y));
+    fn print_head_position(&self, pancurses: &Pancurses) {
+        pancurses.move_pointer(board::HIGHT as i32, 0);
+        pancurses.add_string(&format!("x = {}, y = {}", self.get_head().x, self.get_head().y));
     }
 
-    fn print_fail_head(&self) {
-        move_pointer(self.get_head().y, self.get_head().x);
-        add_string(FAIL_SIGN);
+    fn print_fail_head(&self, pancurses: &Pancurses) {
+        pancurses.move_pointer(self.get_head().y, self.get_head().x);
+        pancurses.add_string(FAIL_SIGN);
     }
 
-    fn print_score(&self) {
+    fn print_score(&self, pancurses: &Pancurses) {
         let text = format!("score: {}", self.body.len());
-        move_pointer(board::HIGHT as i32, (board::WIDTH - text.len()) as i32);
-        add_string(&text);
-        move_pointer(0, 0);
+        pancurses.move_pointer(board::HIGHT as i32, (board::WIDTH - text.len()) as i32);
+        pancurses.add_string(&text);
+        pancurses.move_pointer(0, 0);
     }
 }
 

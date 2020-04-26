@@ -1,38 +1,50 @@
-use ncurses::*;
+use pancurses::*;
 
-pub fn init_ncurses() {
-  initscr();
-  raw();
-
-  keypad(stdscr(), true);
-  noecho();
+pub struct Pancurses {
+  window: Window,
 }
 
-pub fn add_string(txt: &str) {
-  addstr(&txt);
-}
+impl Pancurses {
+  pub fn new() -> Self {
+    let p = Pancurses {
+      window: initscr(),
+    };
+    raw();
 
-pub fn move_pointer(y: i32, x: i32) -> i32 {
-  mv(y, x)
-}
+    p
+  }
 
-pub fn getchar_timeout(delay: i32) {
-  timeout(delay);
-}
+  pub fn init_ncurses(&self) {
+    self.window.keypad(true);
+    noecho();
+  }
 
-pub fn clear_screen() {
-  clear();
-}
+  pub fn add_string(&self, txt: &str) {
+    self.window.printw(&txt);
+  }
 
-pub fn getchar() -> i32 {
-  getch()
-}
+  pub fn move_pointer(&self, y: i32, x: i32) -> i32 {
+    self.window.mv(y, x)
+  }
 
-pub fn release_screen() {
-  endwin();
-}
+  pub fn getchar_timeout(&self, delay: i32) {
+    self.window.timeout(delay);
+  }
 
-pub fn clear_line(y: i32, x: i32) -> i32 {
-  move_pointer(y, x);
-  clrtoeol()
+  pub fn clear_screen(&self) {
+    self.window.clear();
+  }
+
+  pub fn getchar(&self) -> Option<Input> {
+    self.window.getch()
+  }
+
+  pub fn release_screen(&self) {
+    endwin();
+  }
+
+  pub fn clear_line(&self, y: i32, x: i32) -> i32 {
+    self.move_pointer(y, x);
+    self.window.clrtoeol()
+  }
 }
