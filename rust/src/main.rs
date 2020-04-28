@@ -40,8 +40,8 @@ fn game_loop(pancurses: &Pancurses) {
 }
 
 fn wait_for_x_to_exit(pancurses: &Pancurses) {
-  pancurses.clear_line(board::HIGHT as i32, 0);
   pancurses.clear_line((board::HIGHT + 1) as i32, 0);
+  pancurses.clear_line(board::HIGHT as i32, 0);
   pancurses.add_string("To exit hit DEL!");
   pancurses.getchar_timeout(-1);
   loop {
