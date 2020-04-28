@@ -75,18 +75,28 @@ impl Snake {
         return true;
     }
 
-    pub fn change_dir(&mut self, key:char) -> bool {
-      match key {
-          'w' => { self.step_direction = STEP_UP; },
-          'a' => { self.step_direction = STEP_LEFT; },
-          's' => { self.step_direction = STEP_DOWN; },
-          'd' => { self.step_direction = STEP_RIGHT; },
-
-          'x' => { return true; }
-           _ => { return false; }
-      }
-      return false;
+    pub fn change_dir(&mut self, key:char) {
+        if self.is_opposite_dir(key) {
+            return;
+        }
+        match key {
+            'w' => { self.step_direction = STEP_UP; },
+            'a' => { self.step_direction = STEP_LEFT; },
+            's' => { self.step_direction = STEP_DOWN; },
+            'd' => { self.step_direction = STEP_RIGHT; },
+            _ => (),
+        }
     } 
+
+    fn is_opposite_dir(&self, key:char) -> bool {
+        match key {
+            'w' => { self.step_direction == STEP_DOWN },
+            'a' => { self.step_direction == STEP_RIGHT },
+            's' => { self.step_direction == STEP_UP },
+            'd' => { self.step_direction == STEP_LEFT },
+            _ => false,
+        }
+    }
 
     fn check_food_collision(&self) -> bool {
         self.get_head() == self.board.get_food()

@@ -24,8 +24,11 @@ fn game_loop(pancurses: &Pancurses) {
   loop {
       pancurses.clear_screen();
       snake.print(&pancurses);
+      pancurses.move_pointer((board::HIGHT + 1) as i32, 0);
+      pancurses.add_string("To exit hit DEL!");
       match pancurses.getchar() {
-        Some(Input::Character(x)) if snake.change_dir(x) => break,
+        Some(Input::Character(x)) => snake.change_dir(x),
+        Some(Input::KeyDC) => break,
         _ => (),
       }
       if !snake.move_it(&pancurses) {
@@ -37,14 +40,14 @@ fn game_loop(pancurses: &Pancurses) {
 }
 
 fn wait_for_x_to_exit(pancurses: &Pancurses) {
+  pancurses.clear_line(board::HIGHT as i32, 0);
+  pancurses.clear_line((board::HIGHT + 1) as i32, 0);
+  pancurses.add_string("To exit hit DEL!");
   pancurses.getchar_timeout(-1);
   loop {
     match pancurses.getchar() {
-      Some(Input::Character(x)) if x == 'x'  => break,
-        _ => {
-          pancurses.clear_line(board::HIGHT as i32, 0);
-          pancurses.add_string("To exit type x");
-        },
+      Some(Input::KeyDC) => break,
+        _ => (),
     }
   }
 }
