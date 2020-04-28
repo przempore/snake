@@ -67,7 +67,10 @@ impl Snake {
         self.body.push_front(self.get_head() + self.step_direction);
 
         if self.check_food_collision() {
-            self.board.draw_new_food();
+            loop {
+                let food_pos = self.board.draw_new_food();
+                if !self.body.contains(&food_pos) { break; }
+            }
         } else {
             self.body.pop_back();
         }
@@ -110,13 +113,10 @@ impl Snake {
     }
 
     fn get_head(&self) -> Point {
-        match self.body.front() {
-            None => {
-                START_POSITION
-            },
-            Some(head) => {
-                *head
-            }
+        if let Some(head) = self.body.front() {
+            *head
+        } else {
+            START_POSITION
         }
     }
 

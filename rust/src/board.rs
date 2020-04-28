@@ -45,9 +45,10 @@ impl Board {
     pancurses.add_string(&FOOD_SIGN);
   }
 
-  pub fn draw_new_food(&mut self) {
+  pub fn draw_new_food(&mut self) -> Point {
     self.food = Board::draw_food((SIDE_BOARDER_SIZE as u32, (WIDTH - SIDE_BOARDER_SIZE) as u32),
                              (TOP_BOTTOM_BOARDER_SIZE as u32, (HIGHT - TOP_BOTTOM_BOARDER_SIZE) as u32));
+    self.food
   }
 
   pub fn get_food(&self) -> Point {
