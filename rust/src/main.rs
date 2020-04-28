@@ -13,12 +13,16 @@ const DEELAY_FOR_KEY: i32 = 250;
 fn main() {
   let pancurses = Pancurses::new();
   pancurses.init_ncurses();
-  game_loop(&pancurses);
+  loop {
+    if !game_loop(&pancurses) {
+      break;
+    }
+  }
   wait_for_x_to_exit(&pancurses);
   pancurses.release_screen();
 }
 
-fn game_loop(pancurses: &Pancurses) {
+fn game_loop(pancurses: &Pancurses) -> bool {
   let args: Vec<String> = env::args().collect();
   let mut dont_eat_self = false;
   if args.len() > 1 {
@@ -43,6 +47,16 @@ fn game_loop(pancurses: &Pancurses) {
 
       pancurses.move_pointer(board::HIGHT as i32, 0);
   }
+
+  pancurses.clear_line(board::HIGHT as i32, 0);
+  pancurses.add_string("To restart type R");
+  pancurses.getchar_timeout(-1);
+  if let Some(Input::Character(input)) = pancurses.getchar() {
+    input == 'r'
+  } else {
+    false
+  }
+
 }
 
 fn wait_for_x_to_exit(pancurses: &Pancurses) {
