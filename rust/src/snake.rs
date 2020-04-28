@@ -25,15 +25,17 @@ pub struct Snake {
     step_direction: Point,
     body_sign: std::string::String,
     board: board::Board,
+    dont_eat_self: bool,
 }
 
 impl Snake {
-    pub fn new() -> Self {
+    pub fn new(dont_eat_self: bool) -> Self {
         let mut snake  = Snake {
             body: LinkedList::new(),
             step_direction: STEP_RIGHT,
             body_sign: String::from(SIGN),
             board: board::Board::new(),
+            dont_eat_self: dont_eat_self,
         };
         for _ in 0..STARTING_LENGTH {
             snake.body.push_front(snake.get_head() + STEP_RIGHT);
@@ -59,11 +61,17 @@ impl Snake {
 
     pub fn move_it(&mut self, pancurses: &Pancurses) -> bool {
         if self.check_boarder_collisions() {
-            self.print_collision(pancurses);
+            self.print_collision(pancurses, "Board collision! Game over!".to_string());
             self.print_fail_head(pancurses);
-
             return false;
         }
+        
+        if self.check_self_collision() {
+            self.print_collision(pancurses, "You ate yourself! Game over!".to_string());
+            self.print_fail_head(pancurses);
+            return false;
+        }
+
         self.body.push_front(self.get_head() + self.step_direction);
 
         if self.check_food_collision() {
@@ -90,6 +98,16 @@ impl Snake {
             _ => (),
         }
     } 
+
+    fn check_self_collision(&self) -> bool {
+        if self.dont_eat_self {
+            return false;
+        }
+
+        let mut headless_body = self.body.clone();
+        headless_body.pop_front();
+        return headless_body.contains(&self.get_head());
+    }
 
     fn is_opposite_dir(&self, key:char) -> bool {
         match key {
@@ -120,8 +138,7 @@ impl Snake {
         }
     }
 
-    fn print_collision(&self, pancurses: &Pancurses) {
-        let collision_text = format!("Board collision!Game over!");
+    fn print_collision(&self, pancurses: &Pancurses, collision_text: String) {
         pancurses.move_pointer((board::HIGHT / 2) as i32,
                      (board::WIDTH / 2 - (collision_text.len() / 2)) as i32);
         pancurses.add_string(&collision_text);

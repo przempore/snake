@@ -6,6 +6,7 @@ mod point;
 use ncurses_utils::*;
 use pancurses::{Input};
 use snake::*;
+use std::env;
 
 const DEELAY_FOR_KEY: i32 = 250;
 
@@ -18,7 +19,12 @@ fn main() {
 }
 
 fn game_loop(pancurses: &Pancurses) {
-  let mut snake = Snake::new();
+  let args: Vec<String> = env::args().collect();
+  let mut dont_eat_self = false;
+  if args.len() > 1 {
+    dont_eat_self = args[1] == "--dont_eat_self";
+  }
+  let mut snake = Snake::new(dont_eat_self);
 
   pancurses.getchar_timeout(DEELAY_FOR_KEY);
   loop {
