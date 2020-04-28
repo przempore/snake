@@ -50,13 +50,6 @@ if(CPP_STARTER_USE_IMGUI)
   # libalsa:disable_python=True)
 endif()
 
-if(CPP_STARTER_USE_SDL)
-  set(CONAN_EXTRA_REQUIRES ${CONAN_EXTRA_REQUIRES}
-                           sdl2/2.0.10@bincrafters/stable)
-  # set(CONAN_EXTRA_OPTIONS ${CONAN_EXTRA_OPTIONS} sdl2:wayland=True)
-endif()
-
-
 include(cmake/Conan.cmake)
 run_conan()
 
@@ -65,7 +58,7 @@ if(ENABLE_TESTING)
   message(
     "Building Tests. Be sure to check out test/constexpr_tests for constexpr testing"
   )
-  add_subdirectory(test)
+  # add_subdirectory(test)
 endif()
 
 if(ENABLE_FUZZING)
