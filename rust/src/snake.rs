@@ -1,7 +1,7 @@
 use std::char;
 
-use crate::point::*;
 use crate::board;
+use crate::point::*;
 
 use crate::ncurses_utils::*;
 
@@ -12,7 +12,7 @@ const SIGN: &str = "O";
 const FAIL_SIGN: &str = "X";
 const START_POSITION: Point = Point {
     x: (board::WIDTH / 2) as i32,
-    y: (board::HIGHT / 2) as i32
+    y: (board::HIGHT / 2) as i32,
 };
 
 const STEP_UP: Point = Point { x: 0, y: -1 };
@@ -30,7 +30,7 @@ pub struct Snake {
 
 impl Snake {
     pub fn new(dont_eat_self: bool) -> Self {
-        let mut snake  = Snake {
+        let mut snake = Snake {
             body: LinkedList::new(),
             step_direction: STEP_RIGHT,
             body_sign: String::from(SIGN),
@@ -49,10 +49,10 @@ impl Snake {
         let mut body_iter = self.body.iter();
         loop {
             if let Some(pos) = body_iter.next() {
-                    pancurses.move_pointer(pos.y, pos.x);
-                    pancurses.add_string(&self.body_sign);
+                pancurses.move_pointer(pos.y, pos.x);
+                pancurses.add_string(&self.body_sign);
             } else {
-                break
+                break;
             }
         }
         self.print_head_position(pancurses);
@@ -65,7 +65,7 @@ impl Snake {
             self.print_fail_head(pancurses);
             return false;
         }
-        
+
         if self.check_self_collision() {
             self.print_collision(pancurses, "You ate yourself! Game over!".to_string());
             self.print_fail_head(pancurses);
@@ -77,7 +77,9 @@ impl Snake {
         if self.check_food_collision() {
             loop {
                 let food_pos = self.board.draw_new_food();
-                if !self.body.contains(&food_pos) { break; }
+                if !self.body.contains(&food_pos) {
+                    break;
+                }
             }
         } else {
             self.body.pop_back();
@@ -86,18 +88,26 @@ impl Snake {
         return true;
     }
 
-    pub fn change_dir(&mut self, key:char) {
+    pub fn change_dir(&mut self, key: char) {
         if self.is_opposite_dir(key) {
             return;
         }
         match key {
-            'w' => { self.step_direction = STEP_UP; },
-            'a' => { self.step_direction = STEP_LEFT; },
-            's' => { self.step_direction = STEP_DOWN; },
-            'd' => { self.step_direction = STEP_RIGHT; },
+            'w' => {
+                self.step_direction = STEP_UP;
+            }
+            'a' => {
+                self.step_direction = STEP_LEFT;
+            }
+            's' => {
+                self.step_direction = STEP_DOWN;
+            }
+            'd' => {
+                self.step_direction = STEP_RIGHT;
+            }
             _ => (),
         }
-    } 
+    }
 
     fn check_self_collision(&self) -> bool {
         if self.dont_eat_self {
@@ -109,12 +119,12 @@ impl Snake {
         return headless_body.contains(&self.get_head());
     }
 
-    fn is_opposite_dir(&self, key:char) -> bool {
+    fn is_opposite_dir(&self, key: char) -> bool {
         match key {
-            'w' => { self.step_direction == STEP_DOWN },
-            'a' => { self.step_direction == STEP_RIGHT },
-            's' => { self.step_direction == STEP_UP },
-            'd' => { self.step_direction == STEP_LEFT },
+            'w' => self.step_direction == STEP_DOWN,
+            'a' => self.step_direction == STEP_RIGHT,
+            's' => self.step_direction == STEP_UP,
+            'd' => self.step_direction == STEP_LEFT,
             _ => false,
         }
     }
@@ -125,9 +135,9 @@ impl Snake {
 
     fn check_boarder_collisions(&self) -> bool {
         self.get_head().x < board::SIDE_BOARDER_SIZE as i32
-        || self.get_head().x > (board::WIDTH - board::SIDE_BOARDER_SIZE - 1) as i32
-        || self.get_head().y <  board::TOP_BOTTOM_BOARDER_SIZE as i32
-        || self.get_head().y > (board::HIGHT - board::TOP_BOTTOM_BOARDER_SIZE * 2) as i32
+            || self.get_head().x > (board::WIDTH - board::SIDE_BOARDER_SIZE - 1) as i32
+            || self.get_head().y < board::TOP_BOTTOM_BOARDER_SIZE as i32
+            || self.get_head().y > (board::HIGHT - board::TOP_BOTTOM_BOARDER_SIZE * 2) as i32
     }
 
     fn get_head(&self) -> Point {
@@ -139,18 +149,26 @@ impl Snake {
     }
 
     fn print_collision(&self, pancurses: &Pancurses, collision_text: String) {
-        pancurses.move_pointer((board::HIGHT / 2) as i32,
-                     (board::WIDTH / 2 - (collision_text.len() / 2)) as i32);
+        pancurses.move_pointer(
+            (board::HIGHT / 2) as i32,
+            (board::WIDTH / 2 - (collision_text.len() / 2)) as i32,
+        );
         pancurses.add_string(&collision_text);
         let text = format!("score: {}", self.body.len());
-        pancurses.move_pointer((board::HIGHT / 2 + 1)  as i32,
-                     (board::WIDTH / 2 - (text.len() / 2)) as i32);
+        pancurses.move_pointer(
+            (board::HIGHT / 2 + 1) as i32,
+            (board::WIDTH / 2 - (text.len() / 2)) as i32,
+        );
         pancurses.add_string(&text);
     }
 
     fn print_head_position(&self, pancurses: &Pancurses) {
         pancurses.move_pointer(board::HIGHT as i32, 0);
-        pancurses.add_string(&format!("x = {}, y = {}", self.get_head().x, self.get_head().y));
+        pancurses.add_string(&format!(
+            "x = {}, y = {}",
+            self.get_head().x,
+            self.get_head().y
+        ));
     }
 
     fn print_fail_head(&self, pancurses: &Pancurses) {
@@ -172,16 +190,17 @@ mod tests {
     #[test]
     fn should_move_one_step_right() {
         let mut snake = Snake::new();
-        assert_eq!(START_POSITION + Point {x: 3, y: 0}, snake.get_head());
+        assert_eq!(START_POSITION + Point { x: 3, y: 0 }, snake.get_head());
 
         assert!(snake.move_it());
-        assert_eq!(START_POSITION + Point {x: 4, y: 0}, snake.get_head());
+        assert_eq!(START_POSITION + Point { x: 4, y: 0 }, snake.get_head());
     }
 
     #[test]
     fn should_collide_right_boarder_test() {
         let mut snake = Snake::new();
-        for _ in 0..15 { // todo: find value from board::
+        for _ in 0..15 {
+            // todo: find value from board::
             assert!(snake.move_it());
         }
         assert!(!snake.move_it());
@@ -191,7 +210,8 @@ mod tests {
     fn should_collide_top_boarder_test() {
         let mut snake = Snake::new();
         snake.change_dir('w');
-        for _ in 0..6 { // todo: find value from board::
+        for _ in 0..6 {
+            // todo: find value from board::
             assert!(snake.move_it());
         }
         assert!(!snake.move_it());
@@ -201,7 +221,8 @@ mod tests {
     fn should_collide_bottom_boarder_test() {
         let mut snake = Snake::new();
         snake.change_dir('s');
-        for _ in 0..6 { // todo: find value from board::
+        for _ in 0..6 {
+            // todo: find value from board::
             assert!(snake.move_it());
         }
         assert!(!snake.move_it());
@@ -211,10 +232,10 @@ mod tests {
     fn should_collide_left_boarder_test() {
         let mut snake = Snake::new();
         snake.change_dir('a');
-        for _ in 0..22 { // todo: find value from board::
+        for _ in 0..22 {
+            // todo: find value from board::
             assert!(snake.move_it());
         }
         assert!(!snake.move_it());
     }
 }
-

@@ -1,5 +1,5 @@
-use std::ops::{AddAssign, Add};
 use std::cmp::Ordering;
+use std::ops::{Add, AddAssign};
 
 #[derive(Debug, Eq, Copy, Clone)]
 pub struct Point {
@@ -20,25 +20,34 @@ impl Add for Point {
     fn add(self, other: Self) -> Self {
         Self {
             x: self.x + other.x,
-            y: self.y + other.y
+            y: self.y + other.y,
         }
     }
 }
 
 impl PartialOrd for Point {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        if self.x == other.x && self.y == other.y { Some(Ordering::Equal) }
-        else if self.x < other.x && self.y < other.y { Some(Ordering::Less) }
-        else if self.x > other.x && self.y > other.y { Some(Ordering::Greater) }
-        else { None }
+        if self.x == other.x && self.y == other.y {
+            Some(Ordering::Equal)
+        } else if self.x < other.x && self.y < other.y {
+            Some(Ordering::Less)
+        } else if self.x > other.x && self.y > other.y {
+            Some(Ordering::Greater)
+        } else {
+            None
+        }
     }
 }
 
 impl Ord for Point {
     fn cmp(&self, other: &Self) -> Ordering {
-        if self.x < other.x && self.y < other.y { Ordering::Less }
-        else if self.x > other.x && self.y > other.y { Ordering::Greater }
-        else { Ordering::Equal }
+        if self.x < other.x && self.y < other.y {
+            Ordering::Less
+        } else if self.x > other.x && self.y > other.y {
+            Ordering::Greater
+        } else {
+            Ordering::Equal
+        }
     }
 }
 
